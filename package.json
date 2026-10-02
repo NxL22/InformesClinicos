@@ -15,7 +15,10 @@
     "db:status": "sequelize-cli db:migrate:status",
     "db:undo": "sequelize-cli db:migrate:undo",
     "db:init": "npm run db:create && npm run db:migrate",
-    "test": "node --test test/config.test.js test/models.test.js",
+    "test": "node --test test/config.test.js test/models.test.js test/extraction.test.js",
+    "test:extraction": "node --test test/extraction.test.js",
+    "scrape:import": "node scripts/import-faro-attention.js",
+    "scrape:get": "node scripts/get-faro-attention.js",
     "test:db": "node --test test/database.test.js"
   },
   "dependencies": {

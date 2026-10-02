@@ -16,6 +16,8 @@ function defineClinicalInput(sequelize) {
       findings: DataTypes.TEXT,
       rawText: { type: DataTypes.TEXT, allowNull: false },
       additionalFields: DataTypes.JSONB,
+      // NULL en registros anteriores: no conocemos cómo se extrajeron esos campos.
+      extractionMetadata: DataTypes.JSONB,
       sourceUrl: DataTypes.TEXT,
       extractedAt: DataTypes.DATE,
     },

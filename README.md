@@ -1,8 +1,14 @@
 # Informes clínicos — backend
 
 Base de una API en JavaScript, Node.js (22 o superior), Express, PostgreSQL y Sequelize 6.
-No incluye todavía rutas de negocio, autenticación operativa, scraping ni llamadas a proveedores de IA.
+No incluye todavía rutas de negocio, autenticación operativa ni llamadas a proveedores de IA.
 Las futuras llamadas HTTP pueden usar `fetch` nativo; no se instala Axios.
+
+El primer extractor de lectura de Faro Gestión funciona sobre la pestaña existente
+del navegador de Codex. Su ejecución, campos verificados y limitaciones están
+documentados en [docs/faro-extraction.md](docs/faro-extraction.md).
+El primer ciclo de respaldo en PostgreSQL y la consulta de los datos guardados
+están en [docs/faro-first-cycle.md](docs/faro-first-cycle.md).
 
 ## Configuración e inicio
 
@@ -29,6 +35,8 @@ La configuración no incluye credenciales de proveedores de IA porque todavía n
 - `attentions`: paciente, ID externo de atención, fecha del estudio y edad registrada.
 - `procedures`: uno o varios procedimientos por atención; región y lateralidad opcionales.
 - `clinical_inputs`: campos clínicos, `other`, `findings`, texto original completo y campos adicionales JSONB.
+  `extraction_metadata` conserva estados por campo, advertencias, versión del extractor y comprobación
+  de consistencia. Los registros previos quedan con NULL porque esos metadatos no se pueden reconstruir.
 - `templates` / `template_versions`: selección de plantilla e instrucciones, estructura y variables por versión.
 - `generations`: versión de plantilla, copia de los datos de entrada, prompt final, proveedor, modelo y resultado.
 - `reports` / `report_versions`: informe, fecha propia, versiones del texto y aprobación de una versión concreta.
