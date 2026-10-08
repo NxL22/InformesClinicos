@@ -1,5 +1,47 @@
 # Faro Gestión: identificación y apertura desde la lista de trabajo
 
+## Recorrido guardado desde el menú autenticado
+
+`scripts/prepare-faro-worklist.js` exporta `prepareFaroWorklist(tab, selection)`.
+Reutiliza la pestaña del navegador interno de Codex después del login y ejecuta:
+Módulo Radiológico → Vistas → botón azul de Integramedica San Miguel → clic
+fuera del modal → comprobación de la fila solicitada y su código de lugar `ISM`.
+También admite comenzar desde la lista de trabajo. El recorrido se ejecutó desde
+el menú real y terminó con el modal cerrado y la atención solicitada identificada.
+
+Se carga dentro de `cua_repl`, con `tab` ya inicializada y la documentación de
+la integración leída, usando el mismo mecanismo que el extractor:
+
+```js
+let routeRequire = (await import('node:module')).createRequire(
+  'C:/Users/neila/Desktop/Nueva carpeta/InformesClinicos/package.json',
+);
+let { prepareFaroWorklist } = routeRequire('./scripts/prepare-faro-worklist.js');
+let row = await prepareFaroWorklist(tab, { externalAttentionId: 'ID_ATENCION' });
+```
+
+`ID_ATENCION` es un marcador. El script no contiene nombres ni IDs de pacientes
+reales. Devuelve los datos de la fila en memoria y reutiliza `readWorklistRow`
+para comprobar que el ID coincide con el botón Informe. No abre el informe ni
+guarda datos en PostgreSQL. Trabaja con filas renderizadas; no pagina ni cambia
+otros filtros si el caso no está disponible en la vista.
+
+El punto de unión con el proceso existente es el ID devuelto:
+
+```js
+// Ejecutar este segundo paso cuando corresponda iniciar la extracción.
+let { collectAttention } = routeRequire('./src/extraction/faro/collect-attention.js');
+let extraction = await collectAttention(tab, {
+  externalAttentionId: row.externalAttentionId,
+});
+```
+
+La persistencia posterior conserva el mecanismo de `faro-first-cycle.md`.
+Este script necesita el runtime de navegador de Codex; no es un comando npm
+autónomo. No guarda credenciales ni crea una conexión de navegador adicional.
+
+## Inspección previa de apertura de informes
+
 Inspección de lectura realizada dentro del navegador de Codex. Se abrió únicamente
 el botón Informe de la fila indicada por el usuario. No se validó, objetó ni envió
 el informe. No se guardaron datos clínicos, cookies ni información de sesión.

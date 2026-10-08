@@ -9,6 +9,15 @@ del navegador de Codex. Su ejecución, campos verificados y limitaciones están
 documentados en [docs/faro-extraction.md](docs/faro-extraction.md).
 El primer ciclo de respaldo en PostgreSQL y la consulta de los datos guardados
 están en [docs/faro-first-cycle.md](docs/faro-first-cycle.md).
+El recorrido desde el menú autenticado hasta San Miguel está guardado en
+`scripts/prepare-faro-worklist.js`; su ejecución dentro de Codex y el punto de
+unión con el extractor están en [docs/faro-worklist-navigation.md](docs/faro-worklist-navigation.md).
+`scripts/collect-faro-attention.js` conecta ese recorrido con la extracción y el
+respaldo local; luego se reutilizan `scrape:import` y `scrape:get` para PostgreSQL.
+El recorrido por hojas, los límites por pacientes y la importación transaccional
+de lotes están en [docs/faro-batch.md](docs/faro-batch.md).
+El respaldo de imágenes JPG renderizadas del visor en almacenamiento local y
+sus registros `study_files` están en [docs/faro-images.md](docs/faro-images.md).
 
 ## Configuración e inicio
 

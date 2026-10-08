@@ -19,6 +19,43 @@ el paso de navegador se ejecuta dentro de la integración cua_repl ya conectada.
 
 ## Ejecutar la lectura
 
+### Ciclo conectado: menú, San Miguel y extracción
+
+`scripts/collect-faro-attention.js` une `prepareFaroWorklist` y `collectAttention`
+en la misma pestaña autenticada. Aplica la vista de San Miguel, cierra su modal,
+comprueba la fila, abre Informe y guarda la extracción en un archivo nuevo dentro
+de `local-extractions/`. Si se proporciona nombre junto al ID, comprueba ambos
+antes de abrir el caso; admite espacios repetidos sin modificar el nombre original.
+
+Desde `cua_repl`, después de inicializar `tab` y leer la documentación del navegador:
+
+```js
+let cycleRequire = (await import('node:module')).createRequire(
+  'C:/Users/neila/Desktop/Nueva carpeta/InformesClinicos/package.json',
+);
+let { collectFaroAttention } = cycleRequire('./scripts/collect-faro-attention.js');
+let cycle = await collectFaroAttention(tab, { externalAttentionId: 'ID_ATENCION' });
+// Salida de control; nunca imprimir el JSON clínico completo.
+nodeRepl.write(cycle);
+```
+
+Con el respaldo que devuelve `cycle.extractionPath`, ejecutar en la terminal:
+
+```powershell
+npm.cmd run scrape:import -- RUTA_DEL_RESPALDO
+# Esperar la confirmación y el código de salida 0 antes de consultar.
+npm.cmd run scrape:get -- ID_ATENCION
+```
+
+Los valores del ejemplo son marcadores. El ciclo unido se ejecutó para el caso
+autorizado, se confirmó la importación y se compararon los atributos normalizados
+del respaldo con la consulta de PostgreSQL. La comparación incluyó paciente,
+atención, procedimiento y entrada clínica. Los archivos reales quedan fuera de Git.
+Se conservan los límites de identidad descritos abajo: coincidencia de cabecera
+comprobada, ID independiente del contexto del editor aún sin verificar.
+
+### Lectura desde la lista ya preparada
+
 Con la lista de trabajo abierta en el navegador interno de Codex, seleccionar la
 pestaña existente como primer paso del runtime y leer su documentación:
 
